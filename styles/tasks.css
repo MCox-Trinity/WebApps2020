@@ -1,14 +1,99 @@
-body{
-        font-family: Arial, Helvetica, sans-serif;
+html {
+        width: 75%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
 }
 
-h1{
-        background: #F75C7B;
-        color: White;
-        padding: 5px;
+.header {
+        background: white;
+        padding-top: 8px;
+        margin: 0px;
+        position: sticky;
+        font-family: 'Playfair Display', serif;
+}
+
+.header a {
+        text-decoration: none;
+        color: black;
+}
+
+.navigation {
+        background: white;
+        margin: 0;
+        padding: 0;
+        position: sticky;
+}
+
+.navigation ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
         text-align: center;
 }
-h2{
-        background: #FF7D97;
+
+.navigation li {
+        float: left;
+}
+
+.navigation li a {
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+}
+
+.navigation li a:hover {
+        color: rgb(76, 75, 151);
+}
+
+.navigation .active {
+        color: rgb(247, 75, 109);
+}
+
+.header hr {
+        border-top: 1.5px dashed black;
+}
+
+hr {
+        border-top: 1px solid black;
+}
+
+.center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+body {
+        padding: 0px;
+        margin: 0px;
+        font-family: 'Playfair Display', serif;
+}
+
+.header h1 {
+        color: black;
+}
+
+h1 {
+        padding: 5px;
+        text-align: center;
+        vertical-align: middle;
+        font-family: 'Sacramento', cursive;
+        color: rgb(76, 75, 151)
+}
+
+h2 {
+        font-family: 'Sacramento', cursive;
+        background: rgb(115, 114, 155);
         color: white;
+        padding: 3;
+        text-align: center;
+        font-size: 29px;
+}
+
+h3 {
+        color: rgb(247, 92, 123);
 }
