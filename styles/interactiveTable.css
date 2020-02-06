@@ -1,0 +1,31 @@
+#interactiveTable {
+    width: 100%;
+    margin-bottom: 30px;
+}
+th{
+    background-color: rgb(255, 132, 157);
+    text-align: left;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-weight: normal;
+}
+tr{
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+tr:nth-child(odd) {
+    background-color: #ffd7e5;
+}
+
+tr:hover {
+    background-color: rgb(211, 210, 255);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tbody {
+    width: 100%;
+}
