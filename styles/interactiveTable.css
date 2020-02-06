@@ -1,3 +1,20 @@
+form{
+    color: rgb(76, 75, 151);
+}
+input{
+    margin-right: 20px;
+    border: none;
+    background-color: rgb(211, 210, 255);
+    height: 25px;
+    font-family: 'Playfair Display', serif;
+    padding: 2px;
+    padding-left: 4px;
+}
+input:focus{
+    background-color: #ffd7e5;
+    border: none;
+    outline: white;
+}
 #interactiveTable {
     width: 100%;
     margin-bottom: 30px;
