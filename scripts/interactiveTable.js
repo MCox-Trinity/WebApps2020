@@ -70,7 +70,32 @@ function getNameWithoutSpaces(name) {
     newName = newName.replace(/\s/, "")
     return newName
 }
+function attatchClickFunctions(data) {
+    let LastHeader = document.getElementById("Last")
+    let FirstHeader = document.getElementById("First")
+    let TeamHeader = document.getElementById("Team")
+    let PositionHeader = document.getElementById("Position")
+    let GamesPlayedHeader = document.getElementById("GamesPlayed")
+    let MinutesPlayedHeader = document.getElementById("MinutesPlayed")
+    let FreeThrowsMadeHeader = document.getElementById("FreeThrowsMade")
+    let FreeThrowsAttemptedHeader = document.getElementById("FreeThrowsAttempted")
+    let AssistsHeader = document.getElementById("Assists")
+    let StealsHeader = document.getElementById("Steals")
 
+    FirstHeader.onclick = e => {
+        console.log("clicked on First")
+        sortAndUpdateTable(data, "First", true, currentLastNameInputText)
+    }
+    LastHeader.onclick = e => sortAndUpdateTable(data, "Last", true, currentLastNameInputText)
+    TeamHeader.onclick = e => sortAndUpdateTable(data, "Team", true, currentLastNameInputText)
+    PositionHeader.onclick = e => sortAndUpdateTable(data, "Position", true, currentLastNameInputText)
+    GamesPlayedHeader.onclick = e => sortAndUpdateTable(data, "GamesPlayed", false, currentLastNameInputText)
+    MinutesPlayedHeader.onclick = e => sortAndUpdateTable(data, "MinutesPlayed", false, currentLastNameInputText)
+    FreeThrowsMadeHeader.onclick = e => sortAndUpdateTable(data, "FreeThrowsMade", false, currentLastNameInputText)
+    FreeThrowsAttemptedHeader.onclick = e => sortAndUpdateTable(data, "FreeThrowsAttempted", false, currentLastNameInputText)
+    AssistsHeader.onclick = e => sortAndUpdateTable(data, "Assists", false, currentLastNameInputText)
+    StealsHeader.onclick = e => sortAndUpdateTable(data, "Steals", false, currentLastNameInputText)
+}
 function makeTable(cols, data) {
     let tableArea = document.getElementById("interactiveTable")
     tableArea.innerHTML = ""
@@ -99,6 +124,7 @@ function makeTable(cols, data) {
     }
 
     tableArea.appendChild(table)
+    attatchClickFunctions(data)
 }
 
 function sortAndUpdateTable(data, param, leastToGreatest, lastName, firstName) {
@@ -124,27 +150,6 @@ function containsInput(player, last, first) {
 window.onload = () => {
     let data = loadAndFormatData()
     sortAndUpdateTable(data, currentSortedBy, true)
-    let LastHeader = document.getElementById("Last")
-    let FirstHeader = document.getElementById("First")
-    let TeamHeader = document.getElementById("Team")
-    let PositionHeader = document.getElementById("Position")
-    let GamesPlayedHeader = document.getElementById("GamesPlayed")
-    let MinutesPlayedHeader = document.getElementById("MinutesPlayed")
-    let FreeThrowsMadeHeader = document.getElementById("FreeThrowsMade")
-    let FreeThrowsAttemptedHeader = document.getElementById("FreeThrowsAttempted")
-    let AssistsHeader = document.getElementById("Assists")
-    let StealsHeader = document.getElementById("Steals")
-
-    FirstHeader.onclick = e => sortAndUpdateTable(data, "First", true, currentLastNameInputText)
-    LastHeader.onclick = e => sortAndUpdateTable(data, "Last", true, currentLastNameInputText)
-    TeamHeader.onclick = e => sortAndUpdateTable(data, "Team", true, currentLastNameInputText)
-    PositionHeader.onclick = e => sortAndUpdateTable(data, "Position", true, currentLastNameInputText)
-    GamesPlayedHeader.onclick = e => sortAndUpdateTable(data, "GamesPlayed", false, currentLastNameInputText)
-    MinutesPlayedHeader.onclick = e => sortAndUpdateTable(data, "MinutesPlayed", false, currentLastNameInputText)
-    FreeThrowsMadeHeader.onclick = e => sortAndUpdateTable(data, "FreeThrowsMade", false, currentLastNameInputText)
-    FreeThrowsAttemptedHeader.onclick = e => sortAndUpdateTable(data, "FreeThrowsAttempted", false, currentLastNameInputText)
-    AssistsHeader.onclick = e => sortAndUpdateTable(data, "Assists", false, currentLastNameInputText)
-    StealsHeader.onclick = e => sortAndUpdateTable(data, "Steals", false, currentLastNameInputText)
 
     let lastNameInput = document.getElementById("lastNameInput")
     let firstNameInput = document.getElementById("firstNameInput")
