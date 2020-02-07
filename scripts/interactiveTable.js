@@ -144,7 +144,7 @@ function filterByName(data, last, first) {
 }
 
 function containsInput(player, last, first) {
-    return (first === undefined || player["First"].toLowerCase().includes(first.toLowerCase())) && (last === undefined || player["Last"].toLowerCase().includes(last.toLowerCase()))
+    return (first === undefined || player["First"].toLowerCase().startsWith(first.toLowerCase())) && (last === undefined || player["Last"].toLowerCase().startsWith(last.toLowerCase()))
 }
 
 window.onload = () => {

@@ -1,0 +1,4 @@
+INFO  started: Metals version 0.8.0 in workspace 'C:\Users\2alic\Desktop\Web Apps\Code\WebApps2020'
+INFO  time: initialize in 1.1s
+WARN  no build tool detected in workspace 'C:\Users\2alic\Desktop\Web Apps\Code\WebApps2020'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+INFO  shutting down Metals
