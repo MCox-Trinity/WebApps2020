@@ -29,23 +29,9 @@ function loadAndFormatData() {
         d["FreeThrowsAttempted"] = ln[10]
         d["Assists"] = ln[13]
         d["Steals"] = ln[14]
-        // console.log(d["First"] + ", " + d["Last"]
-        //     + "\n\t Team: " + d["Team"]
-        //     + "\n\t Position: " + d["Position"]
-        //     + "\n\t Games Played: " + d["GamesPlayed"]
-        //     + "\n\t Min Played: " + d["MinutesPlayed"]
-        //     + "\n\t Field Goals Made: " + d["FieldGoalsMade"]
-        //     + "\n\t Field Goals Attempted: " + d["FieldGoalsAttempted"]
-        //     + "\n\t 3s Made: " + d["3sMade"]
-        //     + "\n\t 3s Attempted: " + d["3sAttempted"]
-        //     + "\n\t Free Throws Made: " + d["FreeThrowsMade"]
-        //     + "\n\t Free Throws Attempted: " + d["FreeThrowsAttempted"]
-        //     + "\n\t Assits: " + d["Assists"]
-        //     + "\n\t Steals: " + d["Steals"])
         formattedData[idx] = d
         idx++
     }
-    //formattedData.forEach(d => console.log(d["Last"]))
     return formattedData
 }
 
@@ -61,7 +47,6 @@ function sortByParam(data, param, leastToGreatest) {
         if (player1 < player2) return -1
         else return 0
     })
-    //formattedData.forEach(d => console.log(d[param]))
     return formattedData
 }
 

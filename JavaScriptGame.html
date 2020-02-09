@@ -1,0 +1,49 @@
+<DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Maddie Cox | Interactive Table</title>
+        <style type="text/css">
+            @import url(styles/tasks.css);
+            @import url(styles/interactiveTable.css);
+            @import url('https://fonts.googleapis.com/css?family=Sacramento&display=swap');
+            @import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
+        </style>
+        <script src="scripts/javaScriptGame.js"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <h1><a href="index.html">Maddie <img src="images/MaddiePortrait.png" width="8%"> Haley C.</a>
+            </h1>
+            <hr class="dotted">
+            <div class="navigation">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="AboutMe.html">About Me</a></li>
+                    <li><a href="InteractiveTable.html">Interactive Table</a></li>
+                    <li><a href="JavaScriptGame.html" class="active">JavaScript Game</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <h1>JavaScript Game</h1 f>
+        <br>
+        <div id="gameArea">
+        </div>
+        <div id = "gameMessageArea"></div>
+        <h2>Instructions</h2>
+        <ol>
+            <li>The game starts with Player 1 picking one of the spaces on their side of the board.</li>
+            <li>Moving counterclockwise, the pebbles are deposited into each following space (excluding the opponent’s score space) until the pebbles run out.</li>
+            <li>If the last pebble the player deposits is in their score space, they get another turn.</li>
+            <li>If the last pebble the player deposits is in an empty space, the player captures any pieces in the space directly across the board and places them directly in their score.</li>
+            <li>This process repeats until one player’s side of the board is empty.</li>
+            <li>When one player’s half of the board is empty, the other player collects all of the pebbles on their side of the board for their score. </li>
+            <li>Whoever has the most pieces in their score space wins. </li>
+        </ol>
+        <img src="images/mancalaInstructions.PNG">
+    </body>
+
+    </html>
