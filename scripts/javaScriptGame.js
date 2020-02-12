@@ -31,16 +31,15 @@ function getGameTitle() {
         let p1Score = currentGame["Board"]["AS"]
         let p2Score = currentGame["Board"]["BS"]
         if (p1Score === p2Score) return "It's a Tie!"
-        let winner = (p1Score > p2Score) ? "Player 1" : "Player 2"
+        let winner = (p1Score > p2Score) ? "Player A" : "Player B"
         return winner + " wins!"
     }
     else return (getPlayerString(currentGame["Turn"])) + "'s Turn"
 }
 function setMessage(msg) {
-    let gameMessageArea = document.getElementById("gameMessageArea")
+    let gameMessageArea = document.getElementById("gameFooter")
     gameMessageArea.innerHTML = ""
     let message = document.createElement("h4")
-    gameArea.appendChild(message)
     message.appendChild(document.createTextNode(msg))
     gameMessageArea.appendChild(message)
 }
@@ -88,12 +87,12 @@ function tryMovePieces(space) {
 function movePieces(space) {
     let numPieces = currentGame["Board"][space]
     currentGame["Board"][space] = 0
-    updateGameDisplayTemp()
     let spc = space
     for (var i = numPieces; i > 0; i--) {
         let nxt = getNextSpace(spc)
         currentGame["Board"][nxt]++
-        updateGameDisplayTemp()
+        console.log("start: " + space + " end: " + nxt)
+        movePebble(space, nxt)
         spc = nxt
     }
     tryCapture(spc)
@@ -101,7 +100,7 @@ function movePieces(space) {
     if (currentGame["GameOver"] === true) {
         collectRemainingPebbles(currentGame["Turn"])
     }
-    updateGameDisplayTemp()
+    updateSpaces()
 }
 
 function tryCapture(space) {
@@ -112,9 +111,10 @@ function tryCapture(space) {
         currentGame["Board"][score] += captured
         currentGame["Board"][oppositeSpace] = 0
         let player = getPlayerString(currentGame["Turn"])
-        if(captured !== 0){
+        if (captured !== 0) {
             setMessage(player + " captured " + captured + " pebbles!")
         }
+        movePebblesForCapture(oppositeSpace, score, captured)
     }
 }
 
@@ -162,6 +162,7 @@ function collectRemainingPebbles(player) {
     for (var space in boardSpaces) {
         if (!boardSpaces[space].includes("S") && boardSpaces[space].includes(player)) {
             numPebbles += currentGame["Board"][boardSpaces[space]]
+            movePebblesForCapture(boardSpaces[space], player + "S", currentGame["Board"][boardSpaces[space]])
             currentGame["Board"][boardSpaces[space]] = 0
         }
     }
@@ -243,11 +244,205 @@ function isGameOver() {
     }
 }
 
-function getPlayerString(player){
-    return (player === Player.P1) ? "Player 1" : "Player 2"
+function getPlayerString(player) {
+    return (player === Player.P1) ? "Player A" : "Player B"
 }
+
+//Canvas
+let canvas = null
+let ctx = null
+let spaces = []
+function startGame() {
+    makeHeader()
+    loadAndSetupGame()
+    createCanvas()
+    generateSpaces()
+    updateSpaces()
+}
+
+function updateGame() {
+    makeHeader()
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    updateSpaces()
+}
+
+function makeHeader() {
+    let gameArea = document.getElementById("gameHeader")
+    gameArea.innerHTML = ""
+    let turn = document.createElement("h3")
+    turn.appendChild(document.createTextNode(getGameTitle()))
+    gameArea.appendChild(turn)
+}
+
+function createCanvas() {
+    canvas = document.getElementById("canvas")
+    canvas.width = 1215
+    canvas.height = 500
+    ctx = canvas.getContext('2d')
+    ctx.font = "15px Arial"
+    canvas.addEventListener('click', (e) => clickSpace(e))
+}
+
+function clickSpace(event) {
+    let clicked = calculateSpaceClicked(event)
+    if (clicked === null) {
+        setMessage("Invalid Click")
+        return;
+    }
+    tryMovePieces(clicked)
+    updateGame()
+}
+
+function calculateSpaceClicked(event) {
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    for (var space in spaces) {
+        let s = spaces[space]
+        if (x > s.x && x < (s.x + s.width) && y > s.y && y < (s.y + s.height)) {
+            return s.spaceID
+        }
+    }
+    return null
+}
+
+function updateSpaces() {
+    for (var s in spaces) {
+        spaces[s].update()
+    }
+}
+
+function generateSpaces() {
+    let width = 147
+    let xOffset = width + 5
+    let height = 245
+    let yOffset = height + 5
+    ctx.fillStyle = 'black';
+    spaces["BS"] = new space(0, 0, width, height * 2 + 5, "BS")
+    let r = 0;
+    let c = 1;
+    for (let i = boardSpaces.length - 2; i > 6; i--) {
+        let x = c * xOffset
+        let y = r * yOffset
+        spaces[boardSpaces[i]] = new space(x, y, width, height, boardSpaces[i])
+        c++
+    }
+    r++
+    c = 1
+    for (let i = 0; i < 6; i++) {
+        let x = c * xOffset
+        let y = r * yOffset
+        spaces[boardSpaces[i]] = new space(x, y, width, height, boardSpaces[i])
+        c++
+    }
+    spaces["AS"] = new space(7 * xOffset, 0, width, height * 2 + 5, "AS")
+}
+
+function space(x, y, width, height, spaceID) {
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.spaceID = spaceID
+    this.pebbles = makePebbles(currentGame["Board"][this.spaceID], this.x, this.y, this.width, this.height)
+    this.update = function () {
+        ctx.fillStyle = spaceID.includes(Player.P1) ? "#ff9eb5" : "#c9a9de";
+        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.fillStyle = 'white';
+        ctx.fillText(spaceID, x + (width / 2) - 9, y + 25)
+        ctx.fillText(currentGame["Board"][spaceID], x + (width / 2) - 9, y + height - 10)
+        console.log("num pebbles in " + this.spaceID + ": " + this.pebbles.length)
+        for (var p in this.pebbles) {
+            this.pebbles[p].update()
+        }
+    }
+    return this
+}
+
+function movePebblesForCapture(start, end, numPebbles) {
+    for (let i = 0; i < numPebbles; i++) {
+        movePebble(start, end)
+    }
+}
+
+function movePebble(start, end) {
+    let p = spaces[start].pebbles.pop()
+    console.log(start + ": " + spaces[start].pebbles)
+    let r = p.r
+    let x = getNewPebbleXLocationForSpace(end, r)
+    let y = getNewPebbleYLocationForSpace(end, r)
+    let newPebble = new pebble(x, y, r, p.color)
+    spaces[end].pebbles.push(newPebble)
+    console.log(end + ": " + spaces[end].pebbles)
+    spaces[start].update()
+    spaces[end].update()
+}
+
+function makePebbles(numPebbles, xCord, yCord, width, height) {
+    let pebbles = []
+    let pebbleSize = 20
+    for (var i = 0; i < numPebbles; i++) {
+        let x = getPebbleXLocationForSpace(xCord, width, pebbleSize)
+        let y = getPebbleYLocationForSpace(yCord, height, pebbleSize)
+        pebbles[i] = new pebble(x, y, pebbleSize)
+    }
+    return pebbles
+}
+
+function getNewPebbleXLocationForSpace(spaceID, pebbleSize) {
+    let xOffset = spaces[spaceID].x
+    let horizBuffer = 20
+    let xRange = spaces[spaceID].width - pebbleSize - (2 * horizBuffer)
+    return (Math.floor(Math.random() * xRange) + xOffset + pebbleSize + horizBuffer) - horizBuffer
+}
+
+function getPebbleXLocationForSpace(x, width, pebbleSize) {
+    let xOffset = x
+    let horizBuffer = 20
+    let xRange = width - pebbleSize - (2 * horizBuffer)
+    return (Math.floor(Math.random() * xRange) + xOffset + pebbleSize + horizBuffer) - horizBuffer
+}
+
+function getNewPebbleYLocationForSpace(spaceID, pebbleSize) {
+    let yOffset = spaces[spaceID].y
+    let verticalBuffer = 60
+    let yRange = spaces[spaceID].height - pebbleSize - (2 * verticalBuffer)
+    return (Math.floor(Math.random() * yRange) + yOffset + pebbleSize + verticalBuffer)
+}
+function getPebbleYLocationForSpace(y, height, pebbleSize) {
+    let yOffset = y
+    let verticalBuffer = 60
+    let yRange = height - pebbleSize - (2 * verticalBuffer)
+    return (Math.floor(Math.random() * yRange) + yOffset + pebbleSize + verticalBuffer)
+}
+
+function pebble(x, y, r) {
+    let c = randomColor()
+    this.x = x
+    this.y = y
+    this.r = r
+    this.color = c
+    this.update = function () {
+        ctx.globalAlpha = 0.8;
+        ctx.fillStyle = this.color
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.stroke()
+        ctx.globalAlpha = 1;
+    }
+}
+
+function randomColor() {
+    let r = Math.floor(Math.random() * 255).toString(16)
+    let g = Math.floor(Math.random() * 255).toString(16)
+    let b = Math.floor(Math.random() * 255).toString(16)
+    return "#" + r + g + b
+
+}
+
 
 window.onload = () => {
     currentGame = loadAndSetupGame()
-    updateGameDisplayTemp()
+    startGame()
 }
